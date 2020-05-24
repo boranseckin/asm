@@ -1,4 +1,8 @@
-// https://www.codewars.com/kata/58e61f3d8ff24f774400002c/c
+/**
+ * Custom Assembly Language Interpreter
+ * Author: Boran Seckin <me@boranseckin.com>
+ * Inspired by the Kata at https://www.codewars.com/kata/58e61f3d8ff24f774400002c/c
+ */
 
 #include <getopt.h>
 #include <stdio.h>
@@ -237,7 +241,8 @@ void parse(char *line)
 bool handleJump(char *instruction[MAX_ITEMS])
 {
     char condition[4];
-    memcpy(condition, instruction[0], 3); 
+    memcpy(condition, instruction[0], 3);
+    condition[3] = '\0';
     
     // Decide to jump using condition
 
@@ -298,12 +303,12 @@ bool handleJump(char *instruction[MAX_ITEMS])
     return false;
 }
 
-// Frees instructions and labels, close the file
+// Frees instructions and close the file
 void unload(void)
 {
     if (verbose) printf("\nUnloading...\n");
 
-    for (int i = 0; i <= lineIndex; i++)
+    for (int i = 0; i <= MAX_LENGTH; i++)
     {
         for (int j = 0; j < MAX_ITEMS; j++)
         {

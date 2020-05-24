@@ -38,11 +38,11 @@ bool execute(char *line[4], int lineIndex, int *compare)
         }
     }
     
-
     // Set 2nd argument (optional for some instructions) - a registery or an int
     int *secondArg = NULL;
     if (line[2] != NULL)
     {
+        // Try to parse register name if not try to parse int
         if (strcasecmp(line[2], "a") == 0)
         {
             secondArg = &regA;
@@ -161,6 +161,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
     return false;
 }
 
+// Returns a pointer to the asked register
 int * readReg(char reg)
 {
     if (tolower(reg) == 'a')
@@ -183,46 +184,57 @@ int * readReg(char reg)
     return NULL;
 }
 
+// Moves y into x
 void mov(int *x, int *y)
 {
     *x = *y;
     return;
 }
 
+// Increments x
 void inc(int *x)
 {
     (*x)++;
     return;
 }
 
+// Decrements x
 void dec(int *x)
 {
     (*x)--;
     return;
 }
 
+// Adds y to x
 void add(int *x, int *y)
 {
     *x += *y;
     return;
 }
 
+// Substracts y from x
 void sub(int *x, int *y)
 {
     *x -= *y;
     return;
 }
 
+// Multiply x by y
 void mul(int *x, int *y)
 {
     *x *= *y;
 }
 
+// Divides x by y
 void div1(int *x, int *y)
 {
     *x /= *y;
 }
 
+// Compares x and y, updates compare variable according to the result
+// Returns 0, if equal
+// Returns 1, if x is more than y
+// Returns 2, if x is less than y
 void cmp(int *x, int *y, int *compare)
 {
     if (*x == *y)
@@ -244,6 +256,7 @@ void cmp(int *x, int *y, int *compare)
     }
 }
 
+// Prints the value of the asked register
 void prnt(int *x)
 {
     printf(" > %i\n", *x);
