@@ -1,4 +1,4 @@
-// Declares a instructions' functionality
+// Declares instructions' functionality
 #ifndef INSTRUCTIONS_H
 #define INSTRUCTIONS_H
 

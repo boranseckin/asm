@@ -33,7 +33,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
         }
         else
         {
-            printf("Unknown registery [%s] at line %i\n", line[1], lineIndex + 1);
+            printf("Unknown registery %s at line %i\n", line[1], lineIndex + 1);
             return false;
         }
     }
@@ -154,7 +154,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
     // UNKNOWN
     else
     {
-        printf("Unknown command at line %i: %s\n", lineIndex + 1, line[0]);
+        printf("Unknown command %s at line %i\n", line[0], lineIndex + 1);
         return false;
     }
 
