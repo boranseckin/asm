@@ -1,3 +1,8 @@
+/**
+ * Instructions for Basic Assembly Interpreter
+ * Author: Boran Seckin <me@boranseckin.com>
+ */
+
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>

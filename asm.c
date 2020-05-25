@@ -1,5 +1,5 @@
 /**
- * Custom Assembly Language Interpreter
+ * Basic Assembly Interpreter
  * Author: Boran Seckin <me@boranseckin.com>
  * Inspired by the Kata at https://www.codewars.com/kata/58e61f3d8ff24f774400002c/c
  */
