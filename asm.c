@@ -144,7 +144,7 @@ void scan(void)
             *colonptr = '\0'; // Remove the colon
             if (!setLabel(line))
             {
-                printf("Cannot set a duplicate label at line %i\n", lineIndex);
+                printf("Cannot set a duplicate label at line %i\n", lineIndex + 1);
                 exit(1);
             }
         }
@@ -283,7 +283,7 @@ void parse(char *line)
     {
         if (!handleJump(instructions[lineIndex]))
         {
-            printf("Cannot jump to label %s at line %i\n", instructions[lineIndex][1], lineIndex);
+            printf("Cannot jump to label %s at line %i\n", instructions[lineIndex][1], lineIndex + 1);
             exit(1);
         }
         return;
@@ -294,7 +294,7 @@ void parse(char *line)
     {
         if (!handleCall(instructions[lineIndex]))
         {
-            printf("Cannot call the subroutine %s at line %i\n", instructions[lineIndex][1], lineIndex);
+            printf("Cannot call the subroutine %s at line %i\n", instructions[lineIndex][1], lineIndex + 1);
             exit(1);
         }
         return;
@@ -305,7 +305,7 @@ void parse(char *line)
     {
         if (!handleReturn())
         {
-            printf("Cannot return from the subroutine at line %i\n", lineIndex);
+            printf("Cannot return from the subroutine at line %i\n", lineIndex + 1);
             exit(1);
         }
         return;
