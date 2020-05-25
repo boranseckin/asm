@@ -57,7 +57,7 @@ int compare = -1;
 int main(int argc, char *argv[])
 {
     // Print header
-    printf("===== asm v1.0 by Boran Seckin =====\n");
+    printf("=========== asm v1.0 ===========\n");
 
     // Can be called with v flag or without flag
     char flag = getopt(argc, argv, "v");
@@ -96,7 +96,6 @@ int main(int argc, char *argv[])
     unload();
 
     // Print the final result of registers
-    printf("Summary:\n");
     printf("A: %i, B: %i, C: %i, D: %i, COMP: %i\n",
         *readReg('a'),
         *readReg('b'),
@@ -104,6 +103,7 @@ int main(int argc, char *argv[])
         *readReg('d'),
         compare
     );
+    printf("================================\n");
 
     // If end is triggered, program ends without error
     if (end) return 0;
