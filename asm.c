@@ -444,6 +444,7 @@ bool handleReturn(void)
     return false;
 }
 
+// Destroys a linked list
 bool destroy(callback *trav)
 {
     if (trav == NULL) return true;
@@ -462,17 +463,20 @@ void unload(void)
 {
     if (verbose) printf("\nUnloading...\n");
 
+    // If there are unused callback points, clear them
     if (callbackHead != NULL)
     {
         if (verbose) printf(" - Removing uncalled return points\n");
+
         callback *trav = callbackHead;
         if (!destroy(trav))
         {
-            printf("Unable to free all nodes\n");
+            printf("Unable to free all callback points\n");
             exit(1);
         }
     }
 
+    // Free all instructions
     for (int i = 0; i <= MAX_LENGTH; i++)
     {
         for (int j = 0; j < MAX_ITEMS; j++)
@@ -488,8 +492,8 @@ void unload(void)
             printf("\n");
         }
     }
-
     if (verbose) printf("\n");
 
+    // Close the file
     fclose(file);
 }
