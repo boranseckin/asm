@@ -385,7 +385,7 @@ bool handleJump(char *instruction[MAX_ITEMS])
     {
         if (strcmp(labels[i].name, instruction[1]) == 0)
         {
-            if (verbose) printf(" - Jumped to the label %s at line %i\n", labels[i].name, i);
+            if (verbose) printf(" - Jumped to the label %s at line %i\n", labels[i].name, i + 1);
 
             if (fsetpos(file, &(labels[i].offset)) == 0)
             {
@@ -444,10 +444,34 @@ bool handleReturn(void)
     return false;
 }
 
+bool destroy(callback *trav)
+{
+    if (trav == NULL) return true;
+
+    if (destroy(trav->next))
+    {
+        free(trav);
+        return true;
+    }
+
+    return false;
+}
+
 // Frees instructions and remaining callbacks. Closes the file
 void unload(void)
 {
     if (verbose) printf("\nUnloading...\n");
+
+    if (callbackHead != NULL)
+    {
+        if (verbose) printf(" - Removing uncalled return points\n");
+        callback *trav = callbackHead;
+        if (!destroy(trav))
+        {
+            printf("Unable to free all nodes\n");
+            exit(1);
+        }
+    }
 
     for (int i = 0; i <= MAX_LENGTH; i++)
     {
