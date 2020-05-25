@@ -17,6 +17,8 @@ void readline(void);
 void parse(char *line);
 void setLabel(char *name);
 bool handleJump(char *instruction[MAX_ITEMS]);
+bool handleCall(char *instruction[MAX_ITEMS]);
+bool handleReturn(void);
 void unload(void);
 
 // Prints debug values if true
@@ -40,6 +42,10 @@ label labels[MAX_LINES];
 
 // Line Index
 int lineIndex = -1;
+
+// Offset to return from a subroutine
+int callbackLine = -1;
+fpos_t callbackOfffset = -1;
 
 // End the program if true
 bool end = false;
@@ -181,13 +187,6 @@ void parse(char *line)
     // Ignore labels
     if (strchr(str, ':') != NULL) return;
 
-    // If there is end, stop
-    if (str[0] == 'e')
-    {
-        end = true;
-        return;
-    }
-
     unsigned int itemIndex = 0; // Index of the item in line
 
     char *item;
@@ -219,6 +218,13 @@ void parse(char *line)
         printf("\n");
     }
 
+    // If there is end, stop
+    if (str[0] == 'e')
+    {
+        end = true;
+        return;
+    }
+
     // Handle jumps
     if (instructions[lineIndex][0][0] == 'j')
     {
@@ -227,6 +233,31 @@ void parse(char *line)
             printf("Cannot jump to label %s @line %i\n", instructions[lineIndex][1], lineIndex);
             exit(1);
         }
+        return;
+    }
+
+    // Handle call
+    if (strcasecmp(instructions[lineIndex][0], "call") == 0)
+    {
+        if (!handleCall(instructions[lineIndex]))
+        {
+            printf("Cannot call the subroutine %s @line %i\n", instructions[lineIndex][1], lineIndex);
+            exit(1);
+        }
+        return;
+    }
+
+    // Handle return
+    if (strcasecmp(instructions[lineIndex][0], "ret") == 0)
+    {
+        if (!handleReturn())
+        {
+            printf("Cannot return from the subroutine @line %i\n", lineIndex);
+            exit(1);
+        }
+
+        callbackLine = -1;
+        callbackOfffset = -1;
         return;
     }
 
@@ -288,10 +319,8 @@ bool handleJump(char *instruction[MAX_ITEMS])
     {
         if (strcmp(labels[i].name, instruction[1]) == 0)
         {
-            if (verbose)
-            {
-                printf(" - Jumped to %s @line %i\n", labels[i].name, i);
-            }
+            if (verbose) printf(" - Jumped to %s @line %i\n", labels[i].name, i);
+            
             if (fsetpos(file, &(labels[i].offset)) == 0)
             {
                 lineIndex = i;
@@ -300,6 +329,52 @@ bool handleJump(char *instruction[MAX_ITEMS])
         }
     }
     
+    return false;
+}
+
+// Handles call to a subroutine
+bool handleCall(char *instruction[MAX_ITEMS])
+{
+    for (int i = 0; i <= MAX_LENGTH; i++)
+    {
+        if (strcmp(labels[i].name, instruction[1]) == 0)
+        {
+            // Save the curren position
+            callbackLine = lineIndex;
+            if (fgetpos(file, &callbackOfffset) != 0)
+            {
+                return false;
+            }
+
+            if (verbose) printf(" - Called the subroutine %s @line %i\n", labels[i].name, i);
+
+            if (fsetpos(file, &(labels[i].offset)) == 0)
+            {
+                lineIndex = i;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+// Handles returns from a subroutine
+bool handleReturn(void)
+{
+    if (callbackOfffset == -1 || callbackLine == -1)
+    {
+        return false;
+    }
+
+    if (verbose) printf(" - Returned from the subroutine to line %i\n", callbackLine);
+
+    if (fsetpos(file, &(callbackOfffset)) == 0)
+    {
+        lineIndex = callbackLine;
+        return true;
+    }
+
     return false;
 }
 
