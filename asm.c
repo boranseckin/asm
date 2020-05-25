@@ -133,15 +133,15 @@ void scan(void)
         // File cannot contain more lines than MAX_LINES
         if (lineIndex > MAX_LINES - 1)
         {
-            printf("Instructions are too long. File cannot exceed the maximum line limit %i\n", MAX_LINES);
+            printf("Instructions are too long. File cannot exceed the maximum line limit of %i\n", MAX_LINES);
             exit(1);
         }
 
-        // If there is a colon in the line, set it as label
+        // If there is a colon in the line, set it as a label
         char *colonptr = strchr(line, ':');
         if (colonptr != NULL)
         {
-            *colonptr = '\0';
+            *colonptr = '\0'; // Remove the colon
             if (!setLabel(line))
             {
                 printf("Cannot set a duplicate label at line %i\n", lineIndex);
@@ -158,36 +158,43 @@ void scan(void)
 // Saves a label into the array
 bool setLabel(char *name)
 {
+    // Make sure a label with the same name doesn't exist
     for (int i = 0; i < MAX_LINES; i++)
     {
         if (strcmp(labels[i].name, name) == 0) return false;
     }
-    
+
+    // Save the label in the array using the line index
     strcpy(labels[lineIndex].name, name);
     fgetpos(file, &labels[lineIndex].offset);
-    
+
     if (verbose) printf(" - Label %s set for line %i with offset %lli\n", name, lineIndex + 1, labels[lineIndex].offset);
-    
+
     return true;
 }
 
 // Adds a new callback node to the linked list
 bool addCallback(int line, fpos_t offset)
 {
+    // Allocate memory for the new node
     callback *node = malloc(sizeof(callback));
     if (node == NULL) return false;
 
+    // Set line and offset
     node->line = line;
     node->offset = offset;
 
     if (callbackHead == NULL)
     {
+        // If there are no other nodes, point head to the current node
         node->next = NULL;
         callbackHead = node;
         return true;
     }
     else
     {
+        // Else, point current node to where head is pointing
+        // Then, point head to the current node
         node->next = callbackHead;
         callbackHead = node;
         return true;
@@ -199,16 +206,14 @@ bool addCallback(int line, fpos_t offset)
 // Removes the last node from the linked list
 void removeCallback(void)
 {
+    // Make sure the list is not empty
     if (callbackHead == NULL) return;
-
-    // Save a reference to the rest of the list
+    // Save a reference for the rest of the list
     callback *trav = callbackHead->next;
     // Free the last item
     free(callbackHead);
     // Re-point the head
     callbackHead = trav;
-
-    return;
 }
 
 // Read the file line by line and send the line to the parser
@@ -221,13 +226,6 @@ void readline(void)
     while (fgets(line, MAX_LENGTH, file) != NULL && !end)
     {
         lineIndex++;
-        // File cannot contain more lines than MAX_LINES
-        if (lineIndex > MAX_LINES - 1)
-        {
-            printf("Instructions are too long. Max amount of lines is %i.\n", MAX_LINES);
-            exit(1);
-        }
-
         // Parse the read line
         parse(line);
     }
