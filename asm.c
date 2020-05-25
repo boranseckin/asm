@@ -106,12 +106,12 @@ int main(int argc, char *argv[])
 
     // Print the final result of registers
     printf("A: %i, B: %i, C: %i, D: %i, COMP: %i\n",
-        *readReg('a'),
-        *readReg('b'),
-        *readReg('c'),
-        *readReg('d'),
-        compare
-    );
+           *readReg('a'),
+           *readReg('b'),
+           *readReg('c'),
+           *readReg('d'),
+           compare
+          );
     printf("================================\n");
 
     // If end is triggered, program ends without error
@@ -265,7 +265,8 @@ void parse(char *line)
     }
 
     // If verbose, print the read line
-    if (verbose) {
+    if (verbose)
+    {
         printf(" - %i ->", lineIndex + 1);
         for (int i = 0; i < MAX_ITEMS; i++)
         {
@@ -333,7 +334,7 @@ bool handleJump(char *instruction[MAX_ITEMS])
      * je  - Jump if equal
      * jne - Jump if not eqaul
      * jg  - Jump if greater
-     * jge - Jump if greater or equal 
+     * jge - Jump if greater or equal
      * jl  - Jump if less
      * jle - Jump if less or equal
      */
@@ -341,7 +342,7 @@ bool handleJump(char *instruction[MAX_ITEMS])
     char condition[4];
     memcpy(condition, instruction[0], 3);
     condition[3] = '\0';
-    
+
     // If jump includes a condition, first check compare result
     // Equal
     if (condition[1] == 'e')
@@ -394,7 +395,7 @@ bool handleJump(char *instruction[MAX_ITEMS])
             }
         }
     }
-    
+
     return false;
 }
 
@@ -436,7 +437,7 @@ bool handleReturn(void)
 
         if (verbose) printf(" - Returned from the subroutine to line %i\n", callbackHead->line + 2);
 
-        // Remove the return point from the list        
+        // Remove the return point from the list
         removeCallback();
         return true;
     }

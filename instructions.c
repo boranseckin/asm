@@ -42,7 +42,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
             return false;
         }
     }
-    
+
     // Set 2nd argument (optional for some instructions) - a registery or an int
     int *secondArg = NULL;
     if (line[2] != NULL)
@@ -167,7 +167,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
 }
 
 // Returns a pointer to the asked register
-int * readReg(char reg)
+int *readReg(char reg)
 {
     if (tolower(reg) == 'a')
     {
@@ -185,7 +185,7 @@ int * readReg(char reg)
     {
         return &regD;
     }
-    
+
     return NULL;
 }
 

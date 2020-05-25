@@ -20,6 +20,6 @@ void cmp(int *x, int *y, int *compare);
 void prnt(int *x);
 
 bool execute(char *line[4], int lineIndex, int *compare);
-int * readReg(char reg);
+int *readReg(char reg);
 
 #endif // INSTRUCTIONS_H
