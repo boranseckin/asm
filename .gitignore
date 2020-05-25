@@ -52,4 +52,4 @@ Mkfile.old
 dkms.conf
 
 asm
-test.asm
+*.asm
