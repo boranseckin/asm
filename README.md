@@ -64,6 +64,43 @@ A subroutine can call itself or other subroutines. In case of multiple subroutin
 
 `ret` should only be used in a subroutine call. Using it outside a subroutine will cause your program to terminate with an error. Other the other hand, if a subroutine is not returned by `ret` (for example, ended or jumped), it will not cause any problem and the unused pointers will be freed.
 
+## Code Examples
+#### Fibonacci Sequence
+```
+mov a, 1
+mov b, 0
+
+fib:
+    mov c, 0
+    add c, a
+    add c, b
+    prnt c
+    mov a, b
+    mov b, c
+
+cmp c 100
+jl fib
+
+end
+```
+```
+=========== asm v1.0 ===========
+ > 1
+ > 1
+ > 2
+ > 3
+ > 5
+ > 8
+ > 13
+ > 21
+ > 34
+ > 55
+ > 89
+ > 144
+A: 89, B: 144, C: 144, D: 0, COMP: 1
+================================
+```
+
 ## Author
 - Boran Seckin
 
