@@ -190,8 +190,8 @@ void parse(char *line)
     unsigned int itemIndex = 0; // Index of the item in line
 
     char *item;
-    // First item must be a instruction and followed by a space
-    item = strtok(str, " ");
+    // First item must be a instruction and followed by a space or new line
+    item = strtok(str, " \n");
     while (item != NULL && itemIndex <= 3)
     {
         char *charptr = malloc(strlen(item) + 1);
@@ -207,7 +207,7 @@ void parse(char *line)
 
     // If verbose, print the read line
     if (verbose) {
-        printf(" - %i ->", lineIndex);
+        printf(" - %i ->", lineIndex + 1);
         for (int i = 0; i < MAX_ITEMS; i++)
         {
             if (instructions[lineIndex][i] != NULL)
@@ -346,7 +346,7 @@ bool handleCall(char *instruction[MAX_ITEMS])
                 return false;
             }
 
-            if (verbose) printf(" - Called the subroutine %s @line %i\n", labels[i].name, i);
+            if (verbose) printf(" - Called the subroutine %s @line %i\n", labels[i].name, i + 1);
 
             if (fsetpos(file, &(labels[i].offset)) == 0)
             {
