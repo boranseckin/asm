@@ -216,7 +216,7 @@ void removeCallback(void)
     callbackHead = trav;
 }
 
-// Read the file line by line and send the line to the parser
+// Reads the file line by line and sends the line to the parser
 void readline(void)
 {
     if (verbose) printf("\nReading instructions...\n");
@@ -231,37 +231,37 @@ void readline(void)
     }
 }
 
-// Parse a line
+// Parses a line and executes it accordingly
 void parse(char *line)
 {
     unsigned int len = strlen(line);
-
     // If length of the line is <= than 1, ignore
     if (len <= 1) return;
 
     char str[len + 1]; // Length of line + \0
-    memcpy(str, line, len); // Copy line into string
-    str[len] = '\0'; // Add \0
+    memcpy(str, line, len); // Copy line into temporary variable
+    str[len] = '\0'; // Add \0 at the end
 
     // Ignore labels
     if (strchr(str, ':') != NULL) return;
 
-    unsigned int itemIndex = 0; // Index of the item in line
-
     char *item;
+    unsigned int itemIndex = 0; // Index of items in the line
+
     // First item must be a instruction and followed by a space or new line
     item = strtok(str, " \n");
     while (item != NULL && itemIndex <= 3)
     {
+        // Allocate memory for the item and put it into the array
         char *charptr = malloc(strlen(item) + 1);
         strcpy(charptr, item);
         instructions[lineIndex][itemIndex] = charptr;
+
         itemIndex++;
-        // Next items could be seperated by space or comma
-        // It might be indented by a tab
-        // Semicolon indicates a comment
+
+        // Next item could be seperated by space, comma or semicolon
         // Passing NULL makes strtok use its previous value
-        item = strtok(NULL, "\t, ;\n");
+        item = strtok(NULL, ", ;\n");
     }
 
     // If verbose, print the read line
@@ -277,14 +277,8 @@ void parse(char *line)
         printf("\n");
     }
 
-    // If there is end, stop
-    if (instructions[lineIndex][0][0] == 'e')
-    {
-        end = true;
-        return;
-    }
-
     // Handle jumps
+    // Only jump instructions starts with j
     if (instructions[lineIndex][0][0] == 'j')
     {
         if (!handleJump(instructions[lineIndex]))
@@ -317,6 +311,13 @@ void parse(char *line)
         return;
     }
 
+    // Handle end
+    if (strcasecmp(instructions[lineIndex][0], "end") == 0)
+    {
+        end = true; // Setting this true will break the read loop
+        return;
+    }
+
     // Handle instructions
     if (!execute(instructions[lineIndex], lineIndex, &compare))
     {
@@ -324,15 +325,24 @@ void parse(char *line)
     }
 }
 
-// Jumps to a label
+// Jumps to a label with or without a condition
 bool handleJump(char *instruction[MAX_ITEMS])
 {
+    /**
+     * jmp - Jump without condition
+     * je  - Jump if equal
+     * jne - Jump if not eqaul
+     * jg  - Jump if greater
+     * jge - Jump if greater or equal 
+     * jl  - Jump if less
+     * jle - Jump if less or equal
+     */
+
     char condition[4];
     memcpy(condition, instruction[0], 3);
     condition[3] = '\0';
     
-    // Decide to jump using condition
-
+    // If jump includes a condition, first check compare result
     // Equal
     if (condition[1] == 'e')
     {
@@ -370,12 +380,12 @@ bool handleJump(char *instruction[MAX_ITEMS])
         else if (compare != 2) return true;
     }
 
-    // Find the label and jump
+    // If condition passed or didn't exist, find the label and jump
     for (int i = 0; i <= MAX_LENGTH; i++)
     {
         if (strcmp(labels[i].name, instruction[1]) == 0)
         {
-            if (verbose) printf(" - Jumped to %s at line %i\n", labels[i].name, i);
+            if (verbose) printf(" - Jumped to the label %s at line %i\n", labels[i].name, i);
 
             if (fsetpos(file, &(labels[i].offset)) == 0)
             {
@@ -398,9 +408,9 @@ bool handleCall(char *instruction[MAX_ITEMS])
             // Save the curren position
             fpos_t offset;
             if (fgetpos(file, &offset) != 0) return false;
-
+            // Add the return point to the linked list
             if (!addCallback(lineIndex, offset)) return false;
-
+            // Jumpt to the subroutine
             if (fsetpos(file, &(labels[i].offset)) == 0)
             {
                 if (verbose) printf(" - Called the subroutine %s at line %i\n", labels[i].name, i + 1);
@@ -416,14 +426,17 @@ bool handleCall(char *instruction[MAX_ITEMS])
 // Handles returns from a subroutine
 bool handleReturn(void)
 {
+    // Make sure that the return point exists
     if (callbackHead == NULL) return false;
 
+    // Jump back to the return point
     if (fsetpos(file, &(callbackHead->offset)) == 0)
     {
         lineIndex = callbackHead->line;
-            
+
         if (verbose) printf(" - Returned from the subroutine to line %i\n", callbackHead->line + 2);
-        
+
+        // Remove the return point from the list        
         removeCallback();
         return true;
     }
@@ -431,7 +444,7 @@ bool handleReturn(void)
     return false;
 }
 
-// Frees instructions and close the file
+// Frees instructions and remaining callbacks. Closes the file
 void unload(void)
 {
     if (verbose) printf("\nUnloading...\n");
