@@ -56,6 +56,13 @@ jg  bar
 The global variable is initialized as -1 and changed as 0 if equal, 1 if greater and 2 if less.
 
 ## Subroutines
+In addition to jumps, labels can be used to signify subroutines. A subroutine, when called, acts like a synchronous function. The frame is added on top of the call stack and executed until it returns by the `ret` instruction.
+
+When `ret` is found in a subroutine the program is returned to the next line where that subroutine is called.
+
+A subroutine can call itself or other subroutines. In case of multiple subroutine calls, `ret` will only returns the last subroutine call. In theory, with this method, infinite amount of subroutine calls can be called (until the system runs out of memory) and recursion can be easily achieved.
+
+`ret` should only be used in a subroutine call. Using it outside a subroutine will cause your program to terminate with an error. Other the other hand, if a subroutine is not returned by `ret` (for example, ended or jumped), it will not cause any problem and the unused pointers will be freed.
 
 ## Author
 - Boran Seckin
