@@ -1,23 +1,25 @@
 # Basic Assembly Interpreter
 
-This is my final project for course CS50x.
+This is my final project for course [CS50x](https://cs50.harvard.edu/x/2020/project/) 🎉.
+
+This assembly interpreter is focused to run a simple version of the assembly language but at the same time, it supports the fundamental features like subroutines and conditional jumps to run complex alogrithms. It has 4 registers (A, B, C, D) and can process mathematical and logical operations.
 
 ## Syntax
 
 Interpreter respects most of the regular assembly rules with some exceptions to make the code simpler and more user friendly.
-- Each line can only contain one instruction, its arguments (if any) and a comment.
-- Depending on the instruction, there could be zero, one or two arguments for an instruction.
+- Each line can only contain one instruction, its arguments (if any) and a comment (starts with semicolon).
+- Depending on the instruction, there could be zero, one or two arguments.
 - After an instructions, the first argument must be seperated by a space.
-- Multiple arguments can be seperated by a space or a comma or both.
+- Multiple arguments can be seperated by a space, a comma or both.
 - Labels must be unique from instructions and other labels.
 - Labels must end with a colon.
-- The code must end with `end` instruction, otherwise the interpreter will exit 1.
+- The code must end with `end` instruction, otherwise the interpreter will exit with 1.
 - Everything is case-insensitive except the label names.
 - Indentations, multiple spaces and line breaks are ignored by the interpreter.
 
 ## Instructions
 
-In the table below, you can find all the supported instructions by the intrepreter. An asterisks indicates that, a variable can be both a register or an integer.
+In the table below, you can find all the supported instructions by the intrepreter. An asterisks indicates that, a variable can be a register or an integer.
 
 | Instruction | Description |
 | ----------- | ----------- |
@@ -83,6 +85,7 @@ jl fib
 
 end
 ```
+Output:
 ```
 =========== asm v1.0 ===========
  > 1
