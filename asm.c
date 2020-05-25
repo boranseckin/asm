@@ -15,7 +15,7 @@
 void scan(void);
 void readline(void);
 void parse(char *line);
-void setLabel(char *name);
+bool setLabel(char *name);
 bool addCallback(int line, fpos_t offset);
 void removeCallback(void);
 bool handleJump(char *instruction[MAX_ITEMS]);
@@ -142,7 +142,11 @@ void scan(void)
         if (colonptr != NULL)
         {
             *colonptr = '\0';
-            setLabel(line);
+            if (!setLabel(line))
+            {
+                printf("Cannot set a duplicate label at line %i\n", lineIndex);
+                exit(1);
+            }
         }
     }
 
@@ -152,11 +156,19 @@ void scan(void)
 }
 
 // Saves a label into the array
-void setLabel(char *name)
+bool setLabel(char *name)
 {
+    for (int i = 0; i < MAX_LINES; i++)
+    {
+        if (strcmp(labels[i].name, name) == 0) return false;
+    }
+    
     strcpy(labels[lineIndex].name, name);
     fgetpos(file, &labels[lineIndex].offset);
+    
     if (verbose) printf(" - Label %s set for line %i with offset %lli\n", name, lineIndex + 1, labels[lineIndex].offset);
+    
+    return true;
 }
 
 // Adds a new callback node to the linked list
