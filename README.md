@@ -1,8 +1,8 @@
 # Basic Assembly Interpreter
 
-This is my final project for course [CS50x](https://cs50.harvard.edu/x/2020/project/) 🎉.
+This is my final project for [CS50](https://cs50.harvard.edu/x/2020/project/) 🎉.
 
-This assembly interpreter is focused to run a simple version of the assembly language but at the same time, it supports the fundamental features like subroutines and conditional jumps to run complex alogrithms. It has 4 registers (A, B, C, D) and can process mathematical and logical operations.
+This assembly interpreter is focused to run a simple version of the [assembly language](https://wikipedia.org/wiki/Assembly_language) but at the same time, it supports the fundamental features like subroutines and conditional jumps to run complex alogrithms. It has 4 registers (A, B, C, D) and can process mathematical and logical operations.
 
 ## Syntax
 
@@ -106,6 +106,9 @@ A: 89, B: 144, C: 144, D: 0, COMP: 1
 
 ## Author
 - Boran Seckin
+
+## Reference
+I got the idea of building a basic assembly interpreter from the Kata - [Assembler interpreter (part II)](https://www.codewars.com/kata/58e61f3d8ff24f774400002c/c) at [Code Wars](https://www.codewars.com/).
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
