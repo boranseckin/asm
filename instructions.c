@@ -33,7 +33,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
         }
         else
         {
-            printf("Unknown registery [%s] @line %i\n", line[1], lineIndex + 1);
+            printf("Unknown registery [%s] at line %i\n", line[1], lineIndex + 1);
             return false;
         }
     }
@@ -72,7 +72,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
     {
         if (secondArg == NULL)
         {
-            printf("Cannot call mov without a second argument @line %i\n", lineIndex + 1);
+            printf("Cannot call mov without a second argument at line %i\n", lineIndex + 1);
             return false;
         }
         mov(firstArg, secondArg);
@@ -95,7 +95,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
     {
         if (secondArg == NULL)
         {
-            printf("Cannot call add without a second argument @line %i\n", lineIndex + 1);
+            printf("Cannot call add without a second argument at line %i\n", lineIndex + 1);
             return false;
         }
         add(firstArg, secondArg);
@@ -106,7 +106,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
     {
         if (secondArg == NULL)
         {
-            printf("Cannot call sub without a second argument @line %i\n", lineIndex + 1);
+            printf("Cannot call sub without a second argument at line %i\n", lineIndex + 1);
             return false;
         }
         sub(firstArg, secondArg);
@@ -117,7 +117,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
     {
         if (secondArg == NULL)
         {
-            printf("Cannot call mul without a second argument @line %i\n", lineIndex + 1);
+            printf("Cannot call mul without a second argument at line %i\n", lineIndex + 1);
             return false;
         }
         mul(firstArg, secondArg);
@@ -128,7 +128,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
     {
         if (secondArg == NULL)
         {
-            printf("Cannot call div without a second argument @line %i\n", lineIndex + 1);
+            printf("Cannot call div without a second argument at line %i\n", lineIndex + 1);
             return false;
         }
         div1(firstArg, secondArg);
@@ -139,7 +139,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
     {
         if (secondArg == NULL)
         {
-            printf("Cannot call cmp without a second argument @line %i\n", lineIndex + 1);
+            printf("Cannot call cmp without a second argument at line %i\n", lineIndex + 1);
             return false;
         }
         cmp(firstArg, secondArg, compare);
@@ -154,7 +154,7 @@ bool execute(char *line[4], int lineIndex, int *compare)
     // UNKNOWN
     else
     {
-        printf("Unknown command @line %i: %s\n", lineIndex + 1, line[0]);
+        printf("Unknown command at line %i: %s\n", lineIndex + 1, line[0]);
         return false;
     }
 

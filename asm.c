@@ -16,6 +16,8 @@ void scan(void);
 void readline(void);
 void parse(char *line);
 void setLabel(char *name);
+bool addCallback(int line, fpos_t offset);
+void removeCallback(void);
 bool handleJump(char *instruction[MAX_ITEMS]);
 bool handleCall(char *instruction[MAX_ITEMS]);
 bool handleReturn(void);
@@ -43,9 +45,16 @@ label labels[MAX_LINES];
 // Line Index
 int lineIndex = -1;
 
-// Offset to return from a subroutine
-int callbackLine = -1;
-fpos_t callbackOfffset = -1;
+// Callback structure to save return pointers
+typedef struct callback
+{
+    int line;
+    fpos_t offset;
+    struct callback *next;
+}
+callback;
+// Linked list head for callbacks
+callback *callbackHead = NULL;
 
 // End the program if true
 bool end = false;
@@ -82,7 +91,7 @@ int main(int argc, char *argv[])
     file = fopen(argv[optind], "r");
     if (file == NULL)
     {
-        printf("Unable to open the file %s\n", argv[1]);
+        printf("Unable to open the file %s\n", argv[optind]);
         exit(1);
     }
 
@@ -124,7 +133,7 @@ void scan(void)
         // File cannot contain more lines than MAX_LINES
         if (lineIndex > MAX_LINES - 1)
         {
-            printf("Instructions are too long. Max accepted lines are %i.\n", MAX_LINES);
+            printf("Instructions are too long. File cannot exceed the maximum line limit %i\n", MAX_LINES);
             exit(1);
         }
 
@@ -148,6 +157,46 @@ void setLabel(char *name)
     strcpy(labels[lineIndex].name, name);
     fgetpos(file, &labels[lineIndex].offset);
     if (verbose) printf(" - Label %s set for line %i with offset %lli\n", name, lineIndex + 1, labels[lineIndex].offset);
+}
+
+// Adds a new callback node to the linked list
+bool addCallback(int line, fpos_t offset)
+{
+    callback *node = malloc(sizeof(callback));
+    if (node == NULL) return false;
+
+    node->line = line;
+    node->offset = offset;
+
+    if (callbackHead == NULL)
+    {
+        node->next = NULL;
+        callbackHead = node;
+        return true;
+    }
+    else
+    {
+        node->next = callbackHead;
+        callbackHead = node;
+        return true;
+    }
+
+    return false;
+}
+
+// Removes the last node from the linked list
+void removeCallback(void)
+{
+    if (callbackHead == NULL) return;
+
+    // Save a reference to the rest of the list
+    callback *trav = callbackHead->next;
+    // Free the last item
+    free(callbackHead);
+    // Re-point the head
+    callbackHead = trav;
+
+    return;
 }
 
 // Read the file line by line and send the line to the parser
@@ -230,7 +279,7 @@ void parse(char *line)
     {
         if (!handleJump(instructions[lineIndex]))
         {
-            printf("Cannot jump to label %s @line %i\n", instructions[lineIndex][1], lineIndex);
+            printf("Cannot jump to label %s at line %i\n", instructions[lineIndex][1], lineIndex);
             exit(1);
         }
         return;
@@ -241,7 +290,7 @@ void parse(char *line)
     {
         if (!handleCall(instructions[lineIndex]))
         {
-            printf("Cannot call the subroutine %s @line %i\n", instructions[lineIndex][1], lineIndex);
+            printf("Cannot call the subroutine %s at line %i\n", instructions[lineIndex][1], lineIndex);
             exit(1);
         }
         return;
@@ -252,12 +301,9 @@ void parse(char *line)
     {
         if (!handleReturn())
         {
-            printf("Cannot return from the subroutine @line %i\n", lineIndex);
+            printf("Cannot return from the subroutine at line %i\n", lineIndex);
             exit(1);
         }
-
-        callbackLine = -1;
-        callbackOfffset = -1;
         return;
     }
 
@@ -319,7 +365,7 @@ bool handleJump(char *instruction[MAX_ITEMS])
     {
         if (strcmp(labels[i].name, instruction[1]) == 0)
         {
-            if (verbose) printf(" - Jumped to %s @line %i\n", labels[i].name, i);
+            if (verbose) printf(" - Jumped to %s at line %i\n", labels[i].name, i);
 
             if (fsetpos(file, &(labels[i].offset)) == 0)
             {
@@ -340,16 +386,14 @@ bool handleCall(char *instruction[MAX_ITEMS])
         if (strcmp(labels[i].name, instruction[1]) == 0)
         {
             // Save the curren position
-            callbackLine = lineIndex;
-            if (fgetpos(file, &callbackOfffset) != 0)
-            {
-                return false;
-            }
+            fpos_t offset;
+            if (fgetpos(file, &offset) != 0) return false;
 
-            if (verbose) printf(" - Called the subroutine %s @line %i\n", labels[i].name, i + 1);
+            if (!addCallback(lineIndex, offset)) return false;
 
             if (fsetpos(file, &(labels[i].offset)) == 0)
             {
+                if (verbose) printf(" - Called the subroutine %s at line %i\n", labels[i].name, i + 1);
                 lineIndex = i;
                 return true;
             }
@@ -362,16 +406,15 @@ bool handleCall(char *instruction[MAX_ITEMS])
 // Handles returns from a subroutine
 bool handleReturn(void)
 {
-    if (callbackOfffset == -1 || callbackLine == -1)
-    {
-        return false;
-    }
+    if (callbackHead == NULL) return false;
 
-    if (verbose) printf(" - Returned from the subroutine to line %i\n", callbackLine);
-
-    if (fsetpos(file, &(callbackOfffset)) == 0)
+    if (fsetpos(file, &(callbackHead->offset)) == 0)
     {
-        lineIndex = callbackLine;
+        lineIndex = callbackHead->line;
+            
+        if (verbose) printf(" - Returned from the subroutine to line %i\n", callbackHead->line + 2);
+        
+        removeCallback();
         return true;
     }
 
