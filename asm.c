@@ -219,7 +219,7 @@ void parse(char *line)
     }
 
     // If there is end, stop
-    if (str[0] == 'e')
+    if (instructions[lineIndex][0][0] == 'e')
     {
         end = true;
         return;
@@ -320,7 +320,7 @@ bool handleJump(char *instruction[MAX_ITEMS])
         if (strcmp(labels[i].name, instruction[1]) == 0)
         {
             if (verbose) printf(" - Jumped to %s @line %i\n", labels[i].name, i);
-            
+
             if (fsetpos(file, &(labels[i].offset)) == 0)
             {
                 lineIndex = i;
