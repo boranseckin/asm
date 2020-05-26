@@ -7,7 +7,7 @@ This assembly interpreter is focused to run a simple version of the [assembly la
 ## Design
 This interpreter is made to be as dynamic as possible. It can read inifinite lines of code, iterate over infinite loops and can handle recursion thanks to its call stacking feature. Altough there are predefined limits like maximum amount of [lines](instructions.h#L7) and maximum [characters](instructions.h#L8) in one line to limit memory usage, they can be adjusted or even removed.
 
-Interpreter has 3 main components:
+Interpreter has 5 main components:
 #### Scanner
 When the file is successfully opened, a scanner function reads the entire file line by line and looks for the labels. If it finds a label, it stores the name and the position off the label (relative to the start of the file) into an array.
 
