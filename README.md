@@ -4,6 +4,31 @@ This is my final project for [CS50](https://cs50.harvard.edu/x/2020/project/) ðŸ
 
 This assembly interpreter is focused to run a simple version of the [assembly language](https://wikipedia.org/wiki/Assembly_language) but at the same time, it supports the fundamental features like subroutines and conditional jumps to run complex alogrithms. It has 4 registers (A, B, C, D) and can process mathematical and logical operations.
 
+## Design
+This interpreter is made to be as dynamic as possible. It can read inifinite lines of code, iterate over infinite loops and can handle recursion thanks to its call stacking feature. Altough there are predefined limits like maximum amount of [lines](instructions.h#L7) and maximum [characters](instructions.h#L8) in one line to limit memory usage, they can be adjusted or even removed.
+
+Interpreter has 3 main components:
+#### Scanner
+When the file is successfully opened, a scanner function reads the entire file line by line and looks for the labels. If it finds a label, it stores the name and the position off the label (relative to the start of the file) into an array.
+
+#### Reader
+Once the scan is finished, a reading loop is activated. The loop keeps reading line by line until either the file stream reaches the EOF or the instruction `end` is executed. This loop makes it very easy to handle jumps and allows the interpreter to be dynamic. Once a line is read, it is sent to the parser.
+
+#### Parser
+The main purpose of the parser is to isolate the instruction and its arguments (if any). It mostly benefits from the `strtok` function to seperate a line into pieces. Then, it decides what instruction should be executed and calls the corresponding executer.
+
+#### Executer
+The main executer in the [instructions](instructions.c#L17) file handles operations with the registers like `mov` and `cmp`. 
+
+Rest of the functions are handled inside the [main](asm.c) file.
+
+Jumps (if conditional) uses a global variable to see the last comparison result and executes accordingly. When a jump happens, the position of the label is fetched from the array (thanks to the scanner the label can be after the jump instruction too) and the file stream pointer is positioned to where the label is located.
+
+Calls to subroutines fundamently uses the same mechanic as the jumps, however, when a return instruction is called the program needs to know where to return. For that reason, when a `call` is happend, in addition to the jumping position, the current position is also saved. To save the position, the interpreter uses a linked list, therefore, it stacks the returning pointer and if another subroutine call happens inside a subroutine, the program can safely return to the most recent call.
+
+#### Unloader
+Once the execution is done, the program frees all the dynamic memory it allocates and closes the file stream. Thus, there are no memory leaks possible.
+
 ## Syntax
 
 Interpreter respects most of the regular assembly rules with some exceptions to make the code simpler and more user friendly.
