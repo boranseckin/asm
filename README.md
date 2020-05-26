@@ -9,31 +9,6 @@ Usage: ./asm [-v] instructions.asm
 ```
 On top of that, it has the option to be really verbose. If the `-v` tag is passed, it will print out every single step while it is executing the program. This allows the user to see debugging information like which line is being executed, what is the instruction on that line and where the program jumped.
 
-## Design
-This interpreter is made to be as dynamic as possible. It can read infinite lines of code, iterate over infinite loops and can handle recursion thanks to its call stacking feature. Although there are predefined limits like the maximum amount of [lines](instructions.h#L7) and maximum [characters](instructions.h#L8) in one line to limit memory usage, they can be adjusted or even removed.
-
-The interpreter has 5 main components:
-#### Scanner
-When the file is successfully opened, a scanner function reads the entire file line by line and looks for the labels. If it finds a label, it stores the name and the position off the label (relative to the start of the file) into an array.
-
-#### Reader
-Once the scan is finished, a reading loop is activated. The loop keeps reading line by line until either the file stream reaches the EOF or the instruction `end` is executed. This loop makes it very easy to handle jumps and allows the interpreter to be dynamic. Once a line is read, it is sent to the parser.
-
-#### Parser
-The main purpose of the parser is to isolate the instruction and its arguments (if any). It mostly benefits from the `strtok` function to separate a line into pieces. Then, it decides what instruction should be executed and calls the corresponding executer.
-
-#### Executer
-The main executer in the [instructions](instructions.c#L17) file handles operations with the registers like `mov` and `cmp`. 
-
-The rest of the functions are handled inside the [main](asm.c) file.
-
-Jumps (if conditional) uses a global variable to see the last comparison result and executes accordingly. When a jump happens, the position of the label is fetched from the array (thanks to the scanner the label can be after the jump instruction too) and the file stream pointer is positioned to where the label is located.
-
-Calls to subroutines fundamentally use the same mechanic as the jumps, however, when a return instruction is called the program needs to know where to return. For that reason, when a `call` happens, in addition to the jumping position, the current position is also saved. To save the position, the interpreter uses a linked list, therefore, it stacks the returning pointer and if another subroutine call happens inside a subroutine, the program can safely return to the most recent call.
-
-#### Unloader
-Once the execution is done, the program frees all the dynamic memory it allocates and closes the file stream. Thus, there are no memory leaks possible.
-
 ## Syntax
 
 Interpreter respects most of the regular assembly rules with some exceptions to make the code simpler and more user friendly.
@@ -95,6 +70,31 @@ When `ret` is found in a subroutine the program is returned to the next line whe
 A subroutine can call itself or other subroutines. In the case of multiple subroutine calls, `ret` only returns the last subroutine call. In theory, with this method, an infinite amount of subroutine calls can be called (until the system runs out of memory) and recursion can be easily achieved.
 
 `ret` should only be used in a subroutine call. Using it outside a subroutine will cause your program to terminate with an error. Other the other hand, if a subroutine is not returned by `ret` (for example, ended or jumped), it will not cause any problem and the unused pointers will be freed.
+
+## Design
+This interpreter is made to be as dynamic as possible. It can read infinite lines of code, iterate over infinite loops and can handle recursion thanks to its call stacking feature. Although there are predefined limits like the maximum amount of [lines](instructions.h#L7) and maximum [characters](instructions.h#L8) in one line to limit memory usage, they can be adjusted or even removed.
+
+The interpreter has 5 main components:
+#### Scanner
+When the file is successfully opened, a scanner function reads the entire file line by line and looks for the labels. If it finds a label, it stores the name and the position off the label (relative to the start of the file) into an array.
+
+#### Reader
+Once the scan is finished, a reading loop is activated. The loop keeps reading line by line until either the file stream reaches the EOF or the instruction `end` is executed. This loop makes it very easy to handle jumps and allows the interpreter to be dynamic. Once a line is read, it is sent to the parser.
+
+#### Parser
+The main purpose of the parser is to isolate the instruction and its arguments (if any). It mostly benefits from the `strtok` function to separate a line into pieces. Then, it decides what instruction should be executed and calls the corresponding executer.
+
+#### Executer
+The main executer in the [instructions](instructions.c#L17) file handles operations with the registers like `mov` and `cmp`. 
+
+The rest of the functions are handled inside the [main](asm.c) file.
+
+Jumps (if conditional) uses a global variable to see the last comparison result and executes accordingly. When a jump happens, the position of the label is fetched from the array (thanks to the scanner the label can be after the jump instruction too) and the file stream pointer is positioned to where the label is located.
+
+Calls to subroutines fundamentally use the same mechanic as the jumps, however, when a return instruction is called the program needs to know where to return. For that reason, when a `call` happens, in addition to the jumping position, the current position is also saved. To save the position, the interpreter uses a linked list, therefore, it stacks the returning pointer and if another subroutine call happens inside a subroutine, the program can safely return to the most recent call.
+
+#### Unloader
+Once the execution is done, the program frees all the dynamic memory it allocates and closes the file stream. Thus, there are no memory leaks possible.
 
 ## Code Examples
 #### Fibonacci Sequence
