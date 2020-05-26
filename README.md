@@ -4,6 +4,11 @@ This is my final project for [CS50](https://cs50.harvard.edu/x/2020/project/) ðŸ
 
 This assembly interpreter is focused to run a simple version of the [assembly language](https://wikipedia.org/wiki/Assembly_language) but at the same time, it supports the fundamental features like subroutines and conditional jumps to run complex alogrithms. It has 4 registers (A, B, C, D) and can process mathematical and logical operations.
 
+```
+Usage: ./asm [-v] instructions.asm
+```
+On top of that, it has the option to be really verbose. If the `-v` tag is passed, it will print out every single step while it is executing the program. This allows the user to see debuging information like which line is being executed, what is the instruction on that line and where the program jumped.
+
 ## Design
 This interpreter is made to be as dynamic as possible. It can read inifinite lines of code, iterate over infinite loops and can handle recursion thanks to its call stacking feature. Altough there are predefined limits like maximum amount of [lines](instructions.h#L7) and maximum [characters](instructions.h#L8) in one line to limit memory usage, they can be adjusted or even removed.
 
