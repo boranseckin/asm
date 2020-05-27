@@ -1,3 +1,3 @@
 ## Code Examples
-- [Fibonacci Sequence](examples/fibonacci.asm)
-- [Recursion](examples/recursion.asm)
+- [Fibonacci Sequence](fibonacci.asm)
+- [Recursion](recursion.asm)
