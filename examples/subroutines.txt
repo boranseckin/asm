@@ -1,0 +1,36 @@
+=========== asm v1.0 ===========
+
+Scanning labels...
+ - Label foo set for line 6 with offset 33
+ - Label bar set for line 12 with offset 82
+
+Reading instructions...
+ - 1 -> inc c
+ - 2 -> call foo
+ - Called the subroutine foo at line 6
+ - 7 -> inc a
+ - 8 -> call bar
+ - Called the subroutine bar at line 12
+ - 13 -> inc b
+ - 14 -> ret
+ - Returned from the subroutine to line 9
+ - 9 -> inc a
+ - 10 -> ret
+ - Returned from the subroutine to line 3
+ - 3 -> inc d
+ - 4 -> end
+
+Unloading...
+ - inc - c
+ - call - foo
+ - inc - d
+ - end
+ - inc - a
+ - call - bar
+ - inc - a
+ - ret
+ - inc - b
+ - ret
+
+A: 2, B: 1, C: 1, D: 1, COMP: -1
+================================
