@@ -1,0 +1,120 @@
+=========== asm v1.0 ===========
+
+Scanning labels...
+ - Label recursion set for line 5 with offset 41
+ - Label done set for line 12 with offset 122
+
+Reading instructions...
+ - 1 -> mov a 0
+ - 2 -> call recursion
+ - Called the subroutine recursion at line 5
+ - 6 -> cmp a 10
+ - 7 -> je done
+ - 8 -> inc a
+ - 9 -> prnt a
+ > 1
+ - 10 -> call recursion
+ - Called the subroutine recursion at line 5
+ - 6 -> cmp a 10
+ - 7 -> je done
+ - 8 -> inc a
+ - 9 -> prnt a
+ > 2
+ - 10 -> call recursion
+ - Called the subroutine recursion at line 5
+ - 6 -> cmp a 10
+ - 7 -> je done
+ - 8 -> inc a
+ - 9 -> prnt a
+ > 3
+ - 10 -> call recursion
+ - Called the subroutine recursion at line 5
+ - 6 -> cmp a 10
+ - 7 -> je done
+ - 8 -> inc a
+ - 9 -> prnt a
+ > 4
+ - 10 -> call recursion
+ - Called the subroutine recursion at line 5
+ - 6 -> cmp a 10
+ - 7 -> je done
+ - 8 -> inc a
+ - 9 -> prnt a
+ > 5
+ - 10 -> call recursion
+ - Called the subroutine recursion at line 5
+ - 6 -> cmp a 10
+ - 7 -> je done
+ - 8 -> inc a
+ - 9 -> prnt a
+ > 6
+ - 10 -> call recursion
+ - Called the subroutine recursion at line 5
+ - 6 -> cmp a 10
+ - 7 -> je done
+ - 8 -> inc a
+ - 9 -> prnt a
+ > 7
+ - 10 -> call recursion
+ - Called the subroutine recursion at line 5
+ - 6 -> cmp a 10
+ - 7 -> je done
+ - 8 -> inc a
+ - 9 -> prnt a
+ > 8
+ - 10 -> call recursion
+ - Called the subroutine recursion at line 5
+ - 6 -> cmp a 10
+ - 7 -> je done
+ - 8 -> inc a
+ - 9 -> prnt a
+ > 9
+ - 10 -> call recursion
+ - Called the subroutine recursion at line 5
+ - 6 -> cmp a 10
+ - 7 -> je done
+ - 8 -> inc a
+ - 9 -> prnt a
+ > 10
+ - 10 -> call recursion
+ - Called the subroutine recursion at line 5
+ - 6 -> cmp a 10
+ - 7 -> je done
+ - Jumped to the label done at line 12
+ - 13 -> ret
+ - Returned from the subroutine to line 11
+ - 13 -> ret
+ - Returned from the subroutine to line 11
+ - 13 -> ret
+ - Returned from the subroutine to line 11
+ - 13 -> ret
+ - Returned from the subroutine to line 11
+ - 13 -> ret
+ - Returned from the subroutine to line 11
+ - 13 -> ret
+ - Returned from the subroutine to line 11
+ - 13 -> ret
+ - Returned from the subroutine to line 11
+ - 13 -> ret
+ - Returned from the subroutine to line 11
+ - 13 -> ret
+ - Returned from the subroutine to line 11
+ - 13 -> ret
+ - Returned from the subroutine to line 11
+ - 13 -> ret
+ - Returned from the subroutine to line 3
+ - 3 -> end
+
+Unloading...
+ - mov - a - 0
+ - call - recursion
+ - end
+ - cmp - a - 10
+ - je - done
+ - inc - a
+ - prnt - a
+ - call - recursion
+ - ret
+
+A: 10, B: 0, C: 0, D: 0, COMP: 0
+================================

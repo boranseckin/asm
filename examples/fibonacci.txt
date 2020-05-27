@@ -1,0 +1,144 @@
+=========== asm v1.0 ===========
+
+Scanning labels...
+ - Label fib set for line 4 with offset 24
+
+Reading instructions...
+ - 1 -> mov a 1
+ - 2 -> mov b 0
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 1
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - Jumped to the label fib at line 4
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 1
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - Jumped to the label fib at line 4
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 2
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - Jumped to the label fib at line 4
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 3
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - Jumped to the label fib at line 4
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 5
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - Jumped to the label fib at line 4
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 8
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - Jumped to the label fib at line 4
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 13
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - Jumped to the label fib at line 4
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 21
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - Jumped to the label fib at line 4
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 34
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - Jumped to the label fib at line 4
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 55
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - Jumped to the label fib at line 4
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 89
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - Jumped to the label fib at line 4
+ - 5 -> mov c 0
+ - 6 -> add c a
+ - 7 -> add c b
+ - 8 -> prnt c
+ > 144
+ - 9 -> mov a b
+ - 10 -> mov b c
+ - 12 -> cmp c 100
+ - 13 -> jl fib
+ - 15 -> end
+
+Unloading...
+ - mov - a - 1
+ - mov - b - 0
+ - mov - c - 0
+ - add - c - a
+ - add - c - b
+ - prnt - c
+ - mov - a - b
+ - mov - b - c
+ - cmp - c - 100
+ - jl - fib
+ - end
+
+A: 89, B: 144, C: 144, D: 0, COMP: 1
+================================
