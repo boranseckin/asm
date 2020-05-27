@@ -97,42 +97,7 @@ Calls to subroutines fundamentally use the same mechanic as the jumps, however, 
 Once the execution is done, the program frees all the dynamic memory it allocates and closes the file stream. Thus, there are no memory leaks possible.
 
 ## Code Examples
-#### Fibonacci Sequence
-```
-mov a, 1
-mov b, 0
-
-fib:
-    mov c, 0
-    add c, a
-    add c, b
-    prnt c
-    mov a, b
-    mov b, c
-
-cmp c 100
-jl fib
-
-end
-```
-Output:
-```
-=========== asm v1.0 ===========
- > 1
- > 1
- > 2
- > 3
- > 5
- > 8
- > 13
- > 21
- > 34
- > 55
- > 89
- > 144
-A: 89, B: 144, C: 144, D: 0, COMP: 1
-================================
-```
+See the [examples](examples/README.md) folder for the code examples and their outputs.
 
 ## Author
 - Boran Seckin
