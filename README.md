@@ -67,9 +67,9 @@ In addition to jumps, labels can be used to signify subroutines. A subroutine, w
 
 When `ret` is found in a subroutine the program is returned to the next line where that subroutine is called.
 
-A subroutine can call itself or other subroutines. In the case of multiple subroutine calls, `ret` only returns the last subroutine call. In theory, with this method, an infinite amount of subroutine calls can be called (until the system runs out of memory) and recursion can be easily achieved.
+A subroutine can call itself or other subroutines. In the case of multiple subroutine calls, `ret` only returns the last subroutine call (last-in-first-out). In theory, with this method, an infinite amount of subroutine calls can be made (until the system runs out of memory) and recursion can be easily achieved.
 
-`ret` should only be used in a subroutine call. Using it outside a subroutine will cause your program to terminate with an error. Other the other hand, if a subroutine is not returned by `ret` (for example, ended or jumped), it will not cause any problem and the unused pointers will be freed.
+`ret` should only be used in a subroutine call. Using it outside a subroutine will cause your program to terminate with an error. On the other hand, if a subroutine is not returned by `ret` (for example, ended or jumped), it will not cause any problem and the unused pointers will be freed.
 
 ## Design
 This interpreter is made to be as dynamic as possible. It can read infinite lines of code, iterate over infinite loops and can handle recursion thanks to its call stacking feature. Although there are predefined limits like the maximum amount of [lines](instructions.h#L7) and maximum [characters](instructions.h#L8) in one line to limit memory usage, they can be adjusted or even removed.
