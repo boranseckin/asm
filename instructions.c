@@ -12,11 +12,11 @@
 #include "instructions.h"
 
 // Registers
-int regA, regB, regC, regD, value = 0;
+int regA, regB, regC, regD, value1, value2 = 0;
 
 bool execute(char *line[4], int lineIndex, int *compare)
 {
-    // Set 1st argument - must be a registery
+    // Set 1st argument - a registery or an int
     int *firstArg = NULL;
     if (line[1] != NULL)
     {
@@ -35,6 +35,14 @@ bool execute(char *line[4], int lineIndex, int *compare)
         else if (strcasecmp(line[1], "d") == 0)
         {
             firstArg = &regD;
+        }
+        // After checking for registers,
+        // If the instruction is cmp, allow int as first arg
+        else if (strcasecmp(line[0], "cmp") == 0)
+        {
+            // Parse int
+            value1 = atoi(line[1]);
+            firstArg = &value1;
         }
         else
         {
@@ -67,8 +75,8 @@ bool execute(char *line[4], int lineIndex, int *compare)
         else
         {
             // Parse int
-            value = atoi(line[2]);
-            secondArg = &value;
+            value2 = atoi(line[2]);
+            secondArg = &value2;
         }
     }
 
